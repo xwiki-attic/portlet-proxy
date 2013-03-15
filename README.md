@@ -1,27 +1,27 @@
 Integration steps:
 
 Dependency management
-#########################################################
+=========================================================
 
 1. Remove portlet-api-1.0.jar
 2. Copy nekohtml-1.9.16.jar
 3. Copy rhino-1.7R4.jar
 4. Copy xwiki-core-portlet-3.5.1.jar
 5. Repackage yuicompressor because it conflicts with Rhino
-5. Repackage boilerpipe because it conflicts with NekoHTML parser
-6. You may have to update the prototype.js used by the portal with the one used by XWiki
+6. Repackage boilerpipe because it conflicts with NekoHTML parser
+7. You may have to update the prototype.js used by the portal with the one used by XWiki
 
 Configuration
-#########################################################
+=========================================================
 
-1. Copy portlet.xml
-2. Copy editportlet.vm
-3. Modify xwikivars.vm
+ 1. Copy portlet.xml
+ 2. Copy editportlet.vm
+ 3. Modify xwikivars.vm
 
     #set ($isInPortletMode = $xwikimode == 1 || "$!request.getAttribute('javax.portlet.request')" != '')
     #set ($isInServletMode = $xwikimode == 0 && !$isInPortletMode)
 
-4. Modify web.xml
+ 4. Modify web.xml
 
     <!-- Filter that rewrites the XWiki output to be able to include it in a portal page. -->
     <filter>
@@ -40,12 +40,12 @@ Configuration
       <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
 
-5. Wrap HTML element identifiers used in JavaScript code with ID('someHTMLElementId')
-5.1. Add the ID function to javascript.vm
+ 5. Wrap HTML element identifiers used in JavaScript code with ID('someHTMLElementId')
+ 5.1. Add the ID function to javascript.vm
 
     var ID = function(id){return id}
 
-5.2. Wrap the WYSIWYG editor 'hookId' configuration parameter (wysiwyg_writeConfig macro in macros.vm)
+ 5.2. Wrap the WYSIWYG editor 'hookId' configuration parameter (wysiwyg_writeConfig macro in macros.vm)
 
     #if($entry.key.equals('hookId'))
       ${separator}$entry.key: ID('$!{escapetool.javascript($entry.value)}')
@@ -53,12 +53,12 @@ Configuration
       ${separator}$entry.key: '$!{escapetool.javascript($entry.value)}'
     #end
 
-5.3 Wrap 'Comments' with ID function in js/uicomponents/viewers/comments.js
+ 5.3 Wrap 'Comments' with ID function in js/uicomponents/viewers/comments.js
 
-5.4 Modify javascript.vm by adding the following lines before prototype.js
+ 5.4 Modify javascript.vm by adding the following lines before prototype.js
 
     #if($isInPortletMode)
     $xwiki.jsfx.use('js/xwiki/portletOverwrites.js', {'forceSkinAction': true})
     #end
 
-5.5 Copy portletOverwrites.js
+ 5.5 Copy portletOverwrites.js
