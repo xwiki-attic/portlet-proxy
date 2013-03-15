@@ -31,7 +31,7 @@
   <artifactId>portlet-proxy</artifactId>
   <name>Portlet proxy</name>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>1.1-SNAPSHOT</version>
   <description>Provides a portlet that can be used to integrate an XWiki instance inside a JSR286 compatible portal.</description>
   <dependencies>
     <dependency>
