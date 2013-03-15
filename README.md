@@ -16,47 +16,47 @@ Integration steps:
 2.2. Copy editportlet.vm
 2.3. Modify xwikivars.vm
 
-#set ($isInPortletMode = $xwikimode == 1 || "$!request.getAttribute('javax.portlet.request')" != '')
-#set ($isInServletMode = $xwikimode == 0 && !$isInPortletMode)
+    #set ($isInPortletMode = $xwikimode == 1 || "$!request.getAttribute('javax.portlet.request')" != '')
+    #set ($isInServletMode = $xwikimode == 0 && !$isInPortletMode)
 
 2.4. Modify web.xml
 
-<!-- Filter that rewrites the XWiki output to be able to include it in a portal page. -->
-<filter>
-  <filter-name>XWiki Portlet Filter</filter-name>
-  <filter-class>org.xwiki.portlet.controller.DispatchFilter</filter-class>
-</filter>
+    <!-- Filter that rewrites the XWiki output to be able to include it in a portal page. -->
+    <filter>
+      <filter-name>XWiki Portlet Filter</filter-name>
+      <filter-class>org.xwiki.portlet.controller.DispatchFilter</filter-class>
+    </filter>
 
-<!--
-  This filter must be the first one applied in portlet mode because it wraps the request and response objects to fix
-  some of the differences between portlet and servlet mode.
--->
-<filter-mapping>
-  <filter-name>XWiki Portlet Filter</filter-name>
-  <url-pattern>/*</url-pattern>
-  <dispatcher>INCLUDE</dispatcher>
-  <dispatcher>FORWARD</dispatcher>
-</filter-mapping>
+    <!--
+      This filter must be the first one applied in portlet mode because it wraps the request and response objects to fix
+      some of the differences between portlet and servlet mode.
+    -->
+    <filter-mapping>
+      <filter-name>XWiki Portlet Filter</filter-name>
+      <url-pattern>/*</url-pattern>
+      <dispatcher>INCLUDE</dispatcher>
+      <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
 
 2.5. Wrap HTML element identifiers used in JavaScript code with ID('someHTMLElementId')
 2.5.1. Add the ID function to javascript.vm
 
-var ID = function(id){return id}
+    var ID = function(id){return id}
 
 2.5.2. Wrap the WYSIWYG editor 'hookId' configuration parameter (wysiwyg_writeConfig macro in macros.vm)
 
-#if($entry.key.equals('hookId'))
-  ${separator}$entry.key: ID('$!{escapetool.javascript($entry.value)}')
-#else
-  ${separator}$entry.key: '$!{escapetool.javascript($entry.value)}'
-#end
+    #if($entry.key.equals('hookId'))
+      ${separator}$entry.key: ID('$!{escapetool.javascript($entry.value)}')
+    #else
+      ${separator}$entry.key: '$!{escapetool.javascript($entry.value)}'
+    #end
 
 2.5.3 Wrap 'Comments' with ID function in js/uicomponents/viewers/comments.js
 
 2.6 Modify javascript.vm by adding the following lines before prototype.js
 
-#if($isInPortletMode)
-$xwiki.jsfx.use('js/xwiki/portletOverwrites.js', {'forceSkinAction': true})
-#end
+    #if($isInPortletMode)
+    $xwiki.jsfx.use('js/xwiki/portletOverwrites.js', {'forceSkinAction': true})
+    #end
 
 2.7 Copy portletOverwrites.js
